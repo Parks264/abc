@@ -11,23 +11,22 @@
 
     button {
       padding: 12px 20px;
+      margin: 10px 0;
       font-size: 16px;
       cursor: pointer;
     }
 
-    #code {
+    textarea {
       display: none;
     }
   </style>
 </head>
 <body>
 
-  <h2>Click the button to copy PySpark code</h2>
+  <button onclick="copyCode('code1')">PySpark Data Reading and Display Example</button>
 
-  <button onclick="copyCode()">Copy PySpark Code</button>
-
-  <!-- Hidden code block -->
-  <textarea id="code" readonly>
+  <!-- Code Snippet 1 -->
+  <textarea id="code1" readonly>
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName('read data eg').getOrCreate()
 df = spark.read.option("Header",True).csv('Employee.csv')
@@ -45,13 +44,13 @@ spark.stop()
   </textarea>
 
   <script>
-    function copyCode() {
-      const code = document.getElementById("code");
-      code.style.display = "block"; // temporarily show to copy
+    function copyCode(id) {
+      const code = document.getElementById(id);
+      code.style.display = "block";
       code.select();
       document.execCommand("copy");
       code.style.display = "none";
-      alert("PySpark code copied to clipboard!");
+      alert("Code copied to clipboard!");
     }
   </script>
 
