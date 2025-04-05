@@ -22,7 +22,7 @@
 </head>
 <body>
 
-  <h2>PySpark Data Reading and Display Example</h2>
+  <h2>Click the button to copy PySpark code</h2>
 
   <button onclick="copyCode()">Copy PySpark Code</button>
 
@@ -43,3 +43,17 @@ print(pandas_df.head())
 print(pandas_df.tail())
 spark.stop()
   </textarea>
+
+  <script>
+    function copyCode() {
+      const code = document.getElementById("code");
+      code.style.display = "block"; // temporarily show to copy
+      code.select();
+      document.execCommand("copy");
+      code.style.display = "none";
+      alert("PySpark code copied to clipboard!");
+    }
+  </script>
+
+</body>
+</html>
