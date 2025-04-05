@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>error</title>
+  <title>Copy PySpark Code</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -15,13 +15,21 @@
       font-size: 16px;
       cursor: pointer;
     }
+    pre {
+      background-color: #f4f4f4;
+      padding: 15px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
   </style>
 </head>
 <body>
 
-  <h2>.</h2>
+  <h2>Copy PySpark Code to Clipboard</h2>
 
-  <button onclick="copyText('from pyspark.sql import SparkSession
+  <pre id="pyspark-code">
+from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName('read data eg').getOrCreate()
 df = spark.read.option("Header",True).csv('Employee.csv')
 df.show()
@@ -30,20 +38,22 @@ df.printSchema()
 df.select("Salary").show()
 df.select("Salary").show(3)
 df.filter(df["Salary"]>15000).show()
-#CONVERT THE PYSPARK DATA FRAME TO PANDAS
+# CONVERT THE PYSPARK DATA FRAME TO PANDAS
 pandas_df = df.toPandas()
 print(pandas_df.head())
 print(pandas_df.tail())
-spark.stop()')">Copy "PySpark Data Reading and Display Example"</button>
-  <button onclick="copyText('This is a test message.')">Copy Test Message</button>
-  <button onclick="copyText('Sample Text 123')">Copy Sample Text</button>
+spark.stop()
+  </pre>
+
+  <button onclick="copyCode()">Copy PySpark Code</button>
 
   <script>
-    function copyText(text) {
-      navigator.clipboard.writeText(text).then(() => {
-        alert(`Copied: ${text}`);
+    function copyCode() {
+      const code = document.getElementById('pyspark-code').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        alert('PySpark code copied to clipboard!');
       }).catch(err => {
-        console.error('Failed to copy text: ', err);
+        alert('Failed to copy: ' + err);
       });
     }
   </script>
