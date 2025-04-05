@@ -1,32 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Copy PySpark Code</title>
+  <title>PySpark Code Examples</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
     }
-
     button {
-      padding: 12px 20px;
       margin: 10px 0;
+      padding: 10px 20px;
       font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
       cursor: pointer;
+      border-radius: 6px;
     }
-
+    button:hover {
+      background-color: #45a049;
+    }
     textarea {
-      display: none;
+      position: absolute;
+      left: -9999px;
     }
   </style>
 </head>
 <body>
 
-  <button onclick="copyCode('code1')">PySpark Data Reading and Display Example</button>
+<h2>Click a button to copy PySpark code</h2>
 
-  <!-- Code Snippet 1 -->
-  <textarea id="code1" readonly>
+<!-- Buttons + Textareas -->
+
+<!-- 1 -->
+<button onclick="copyCode('code1')">PySpark Data Reading and Display Example</button>
+<textarea id="code1" readonly>
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName('read data eg').getOrCreate()
 df = spark.read.option("Header",True).csv('Employee.csv')
@@ -36,23 +44,429 @@ df.printSchema()
 df.select("Salary").show()
 df.select("Salary").show(3)
 df.filter(df["Salary"]>15000).show()
-# CONVERT THE PYSPARK DATA FRAME TO PANDAS
 pandas_df = df.toPandas()
 print(pandas_df.head())
 print(pandas_df.tail())
 spark.stop()
-  </textarea>
+</textarea>
 
-  <script>
-    function copyCode(id) {
-      const code = document.getElementById(id);
-      code.style.display = "block";
-      code.select();
-      document.execCommand("copy");
-      code.style.display = "none";
-      alert("Code copied to clipboard!");
-    }
-  </script>
+<!-- 2 -->
+<button onclick="copyCode('code2')">Combining DataFrame with PySpark</button>
+<textarea id="code2" readonly>
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+
+spark = SparkSession.builder.appName('Combined DataFrame').getOrCreate()
+
+data1 = [(1,"Himanshu",50),(2,"Dhanraj",21),(3,"Sohel",5)]
+data2 = [(4,"Shipra",22),(5,"Rashmi",25),(6,"Iqra",24)]
+
+column = ["ID","Name","Age"]
+
+df1 = spark.createDataFrame(data1,column)
+df2 = spark.createDataFrame(data2,column)
+
+df1.show()
+df2.show()
+</textarea>
+
+<!-- 3 -->
+<button onclick="copyCode('code3')">Combining DataFrame with PySpark Using Joins</button>
+<textarea id="code3" readonly>
+Combined_df = df1.union(df2)
+Combined_df.show()
+df3=df2.select("ID","Name","Age")
+Combined_df.show()
+
+data4 = [(1,"Mumbai"),(2,"Bangalore"),(3,"Delhi"),(4,"Amritsar"),(5,"Kolkata"),(6,"Chennai")]
+column2 = ["ID","City"]
+df4 = spark.createDataFrame(data4,column2)
+df4.show()
+
+join_df = df1.join(df4,on="ID",how="inner")
+join_df.show()
+
+df1 = df1.withColumn("Country",col("Name"))
+df1.show()
+
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName('read data eg').getOrCreate()
+df1 = spark.read.option("Header",True).csv('/content/1.csv')
+df1.show()
+df2 = spark.read.option("Header",True).csv('dept.csv')
+df2.show()
+df_merge=df1.join(df2,on="dept_id",how="inner")
+df_merge.show()
+</textarea>
+
+<!-- 4 -->
+<button onclick="copyCode('code4')">Performing data operations using collect, filter, map, and MapReduce in PySpark</button>
+<textarea id="code4" readonly>
+from pyspark.sql import  SparkSession
+from pyspark.sql.functions import col
+
+spark = SparkSession.builder.appName('read data eg').getOrCreate()
+data = [(1,"Laptop",1000,"Electronics"),
+        (2,"Shoes",50,"Fashion"),
+        (3, "Shirt", 25, "Fashion"),
+        (4, "Headphones", 150, "Electronics"),
+        (5, "Pants", 40, "Fashion")]
+column = ["prod_id","product","price","category"]
+df = spark.createDataFrame(data,column)
+df.show()
+collected_data=df.collect()
+for row in collected_data :
+  print(row)
+df.filter(df["price"]>100).show()
+</textarea>
+
+<!-- 5 -->
+<button onclick="copyCode('code5')">Sales Data Analysis : Map reduce</button>
+<textarea id="code5" readonly>
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("SalesTotal").getOrCreate()
+sc = spark.sparkContext
+
+sales_data = [
+    ("Laptop", 1000),
+    ("Mobile", 500),
+    ("Laptop", 1200),
+    ("Tablet", 700),
+    ("Mobile", 450),
+    ("Tablet", 650),
+    ("Laptop", 1100),
+    ("Mobile", 520),
+]
+
+rdd = sc.parallelize(sales_data)
+mapped_rdd = rdd.map(lambda x: (x[0], x[1]))
+total_sales_rdd = mapped_rdd.reduceByKey(lambda a, b: a + b)
+
+print("**********************************")
+print("Sales Data Analysis : Map reduce")
+print("**********************************")
+
+result = total_sales_rdd.collect()
+for product, total in result:
+    print(f"{product}: ${total}")
+
+spark.stop()
+</textarea>
+
+<!-- 6 -->
+<button onclick="copyCode('code6')">Creating a spark session using the configuration and Data frame creation</button>
+<textarea id="code6" readonly>
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName('SparkSession example').config('Spark Config','config - value').getOrCreate()
+
+from pyspark.sql import Row
+data = [Row(Name='Shipra',Age=24),Row(Name='Iqra',Age=30),Row(Name='Sohel',Age=35)]
+
+df = spark.createDataFrame(data)
+
+df.show()
+df.printSchema()
+</textarea>
+
+<!-- 7 -->
+<button onclick="copyCode('code7')">Create User Defined Function Using PySpark</button>
+<textarea id="code7" readonly>
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName('User input wala practical').config('Spark Config','config - value').getOrCreate()
+
+num_rows = int(input("Enter number of rows"))
+data = []
+for i in range (num_rows):
+  name=input("Enter Name - ")
+  age = int(input("Enter Age - "))
+  city = input("Enter City - ")
+  data.append((name,age,city))
+column = ["Name","Age","city"]
+df=spark.createDataFrame(data,schema=column)
+
+df.show()
+df.printSchema()
+
+print("Original Data")
+df.select("Name","Age").show()
+
+print("Age Filter")
+df.filter(df['Age']>21).show()
+
+print("Location Filter")
+df.filter(df['City']=="Mumbai").show()
+</textarea>
+
+<!-- 8 -->
+<button onclick="copyCode('code8')">Creating a temporary view of the data frame to use SQL query with Spark session</button>
+<textarea id="code8" readonly>
+import pyspark
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("DataFrameExample").getOrCreate()
+df = spark.createDataFrame([(1, 22), (2, 23), (3, 24)], ["id", "age"])
+df.show()
+df.createOrReplaceTempView("people")
+result = spark.sql("SELECT * FROM people WHERE age > 22").show()
+
+from pyspark.sql import SparkSession
+data  = [(1,'electronics',1000,'2024-01-01'),(2,'fashion',50,'2024-01-02'),(3,'cosmetics',500,'2024-01-03'),(4,'novels',1500,'2025-04-04')]
+columns = ['id','category','price','date']
+spark = SparkSession.builder.appName('ecommerce').getOrCreate()
+df = spark.createDataFrame(data,columns)
+df.show()
+df.createOrReplaceTempView("sales")
+
+spark.sql("SELECT category,avg(price) as avg_amount FROM sales group by category").show()
+spark.sql("SELECT * from sales order by price desc limit 2").show()
+spark.sql("SELECT * from sales order by price asc limit 2").show()
+
+# Visualization
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+result = spark.sql("SELECT category,avg(price) as avg_amount FROM sales group by category")
+df_query1 = result.toPandas()
+plt.figure(figsize=(8, 6))
+sns.barplot(x='category', y='avg_amount', data=df_query1)
+plt.title('Name \n\nCategories by Price') 
+plt.xlabel('Category')
+plt.ylabel('Price')
+plt.show()
+</textarea>
+
+<!-- 9 -->
+<button onclick="copyCode('code9')">Creating User defined function with spark session</button>
+<textarea id="code9" readonly>
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import udf
+from pyspark.sql.types import StringType
+
+spark =  SparkSession.builder.appName("udf examle").getOrCreate()
+
+data = [("Himanshu",65),("Ummara",15),("Sohel",45),] 
+columns = ["Name","Age"]
+df  = spark.createDataFrame(data,columns)
+df.show()
+
+def age_group(age):
+  if age < 18:
+    return "Minor"
+  elif age >= 18 and age < 60:
+    return "Adult"
+  else:
+    return "Senior"
+
+age_group_udf = udf(age_group,StringType())
+df_with_group = df.withColumn("Age_Group",age_group_udf(df["Age"]))
+df_with_group.show()
+
+age_count = df_with_group.groupBy("Age_Group").count()
+age_count.show()
+</textarea>
+
+  <!-- 10 -->
+<button onclick="copyCode('code10')">PySpark using MLlib library working with linear regression</button>
+<textarea id="code10" readonly>
+from pyspark.sql import SparkSession
+from pyspark.ml.regression import LinearRegression
+from pyspark.ml.feature import VectorAssembler
+
+spark.stop()
+spark =  SparkSession.builder.appName("udf examle").getOrCreate()
+
+data =[(1,100),(2,110),(3,120),(4,130),(5,105)]
+columns=["Feature","Target"]
+df  = spark.createDataFrame(data,columns)
+df.show()
+
+Assembler = VectorAssembler(inputCols=["Feature"],outputCol="Features")
+Assemebled_df = Assembler.transform(df).select("Features","Target")
+Assemebled_df.show()
+
+LR = LinearRegression(featuresCol="Features",labelCol="Target")
+LR_model = LR.fit(Assemebled_df)
+print(LR_model.coefficients)
+print(LR_model.intercept)
+
+training_summary = LR_model.summary
+RMSE = training_summary.rootMeanSquaredError
+print("RMSE,",RMSE)
+
+prediction = LR_model.transform(Assemebled_df)
+print(prediction.show())
+</textarea>
+
+<!-- 11 -->
+<button onclick="copyCode('code11')">PySpark using MLlib library working with KMeans clustering</button>
+<textarea id="code11" readonly>
+from pyspark.sql import SparkSession
+from pyspark.ml.clustering import KMeans
+from pyspark.ml.feature import VectorAssembler
+
+spark = SparkSession.builder.appName("KMeans").getOrCreate()
+
+data = [(1.0,2.0),(1.5,1.8),(5.0,8.0),(8.0,8.0),(1.0,0.6),(9.0,11.0)]
+columns = ['Sub1','Sub2']
+df = spark.createDataFrame(data,columns)
+df.show()
+
+assembler = VectorAssembler(inputCols=['Sub1','Sub2'],outputCol='features')
+assembler1=assembler.transform(df)
+assembler1.show()
+
+Kmeans = KMeans(k=2,seed=1)
+model = Kmeans.fit(assembler1)
+
+prediction = model.transform(assembler1)
+prediction.show()
+
+for center in model.clusterCenters():
+  print(center)
+</textarea>
+
+<!-- 12 -->
+<button onclick="copyCode('code12')">PySpark using MLlib library working with Logistic Regression</button>
+<textarea id="code12" readonly>
+from pyspark.sql import SparkSession
+from pyspark.ml.classification import LogisticRegression
+from pyspark.ml.feature import CountVectorizer,IDF,Tokenizer
+
+spark = SparkSession.builder.appName("Logistic Regresion").getOrCreate()
+
+data = [ (1,"win a free iphone") ,(1,"congratulation you won a lottery"),
+ (0,"lets meet for lunch"),(0,"don't forget to complete the assignment")]
+columns = ['label','text']
+df = spark.createDataFrame(data,columns)
+df.show()
+
+tokenizer = Tokenizer(inputCol='text',outputCol='tokens')
+df = tokenizer.transform(df)
+df.show()
+
+vectorizer = CountVectorizer(inputCol='tokens',outputCol='rawfeature')
+vector_model = vectorizer.fit(df)
+df = vector_model.transform(df)
+df.show()
+
+df = df.select('label','rawfeature')
+df = df.withColumnRenamed("rawfeature","features1")
+
+LR = LogisticRegression(featuresCol='features1',labelCol='label')
+lr_model = LR.fit(df)
+
+prediction = lr_model.transform(df)
+prediction.show()
+</textarea>
+
+<!-- 13 -->
+<button onclick="copyCode('code13')">PySpark using MLlib library working with Naive Bayes</button>
+<textarea id="code13" readonly>
+from pyspark.sql import SparkSession
+from pyspark.ml.feature import Tokenizer, HashingTF, StringIndexer
+from pyspark.ml.classification import NaiveBayes
+from pyspark.ml import Pipeline
+from pyspark.ml.evaluation import MulticlassClassificationEvaluator
+
+print("KSMSCIT038 - ummara") 
+print("***********************************")
+
+spark = SparkSession.builder.appName("NaiveBayesInPySpark").getOrCreate()
+
+data = [
+    (0, "spark is great and fast", "positive"),
+    (1, "hadoop is reliable but slow", "negative"),
+    (2, "spark and hadoop are big data technologies", "positive"),
+    (3, "I dislike hadoop performance", "negative"),
+    (4, "spark offers ease of development", "positive"),
+    (5, "I am frustrated by hadoop complexities", "negative")
+]
+columns = ["id", "text", "label"]
+df = spark.createDataFrame(data, columns)
+
+labelIndexer = StringIndexer(inputCol="label", outputCol="indexedLabel")
+tokenizer = Tokenizer(inputCol="text", outputCol="words")
+hashingTF = HashingTF(inputCol="words", outputCol="features", numFeatures=1000)
+nb = NaiveBayes(labelCol="indexedLabel", featuresCol="features", modelType="multinomial")
+
+pipeline = Pipeline(stages=[labelIndexer, tokenizer, hashingTF, nb])
+(trainingData, testData) = df.randomSplit([0.7, 0.3], seed=1234)
+
+model = pipeline.fit(trainingData)
+predictions = model.transform(testData)
+predictions.select("id", "text", "label", "indexedLabel", "prediction").show()
+
+evaluator = MulticlassClassificationEvaluator(
+    labelCol="indexedLabel", predictionCol="prediction", metricName="accuracy"
+)
+accuracy = evaluator.evaluate(predictions)
+print(f"Test set accuracy: {accuracy}")
+spark.stop()
+</textarea>
+
+<!-- 14 -->
+<button onclick="copyCode('code14')">Real-Time Word Count with PySpark Streaming</button>
+<textarea id="code14" readonly>
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.appName("WordCount").getOrCreate()
+sc = spark.sparkContext
+
+data = [
+    "hello world",
+    "hello pyspark",
+    "pyspark map reduce example",
+    "reduce and map are powerful",
+]
+
+rdd = sc.parallelize(data)
+mapped_rdd = rdd.flatMap(lambda line: line.split(" ")).map(lambda word: (word, 1))
+word_counts = mapped_rdd.reduceByKey(lambda a, b: a + b)
+
+print("**********************************************")
+print("Real-Time Word Count with PySpark Streaming")
+print("**********************************************")
+
+result = word_counts.collect()
+for word, count in result:
+    print(f"{word}: {count}")
+
+spark.stop()
+</textarea>
+
+<!-- 15 -->
+<button onclick="copyCode('code15')">PySpark Word Count and Data Manipulation Example</button>
+<textarea id="code15" readonly>
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import split,explode,col
+
+spark = SparkSession.builder.appName("Word Count").getOrCreate()
+
+data = [("hello world",),("Hello how are you",),("Im fine",)]
+df = spark.createDataFrame(data,["text"])
+df.show()
+
+word_df = df.withColumn("words",explode(split(col("text")," ")))
+word_df.show()
+
+print("**************************")
+word_count = word_df.groupBy("words").count().orderBy(col("count").desc())
+word_count.show()
+</textarea>
+
+<script>
+function copyCode(id) {
+  var textarea = document.getElementById(id);
+  textarea.select();
+  textarea.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  alert("Code copied to clipboard!");
+}
+</script>
 
 </body>
 </html>
+
