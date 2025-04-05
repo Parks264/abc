@@ -8,27 +8,26 @@
       font-family: Arial, sans-serif;
       padding: 20px;
     }
+
     button {
-      display: block;
-      margin: 10px 0;
-      padding: 10px 20px;
+      padding: 12px 20px;
       font-size: 16px;
       cursor: pointer;
     }
-    pre {
-      background-color: #f4f4f4;
-      padding: 15px;
-      border-radius: 8px;
-      white-space: pre-wrap;
-      word-wrap: break-word;
+
+    #code {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <h2>Copy PySpark Code to Clipboard</h2>
+  <h2>PySpark Data Reading and Display Example</h2>
 
-  <pre id="pyspark-code">
+  <button onclick="copyCode()">Copy PySpark Code</button>
+
+  <!-- Hidden code block -->
+  <textarea id="code" readonly>
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName('read data eg').getOrCreate()
 df = spark.read.option("Header",True).csv('Employee.csv')
@@ -43,20 +42,4 @@ pandas_df = df.toPandas()
 print(pandas_df.head())
 print(pandas_df.tail())
 spark.stop()
-  </pre>
-
-  <button onclick="copyCode()">Copy PySpark Code</button>
-
-  <script>
-    function copyCode() {
-      const code = document.getElementById('pyspark-code').innerText;
-      navigator.clipboard.writeText(code).then(() => {
-        alert('PySpark code copied to clipboard!');
-      }).catch(err => {
-        alert('Failed to copy: ' + err);
-      });
-    }
-  </script>
-
-</body>
-</html>
+  </textarea>
