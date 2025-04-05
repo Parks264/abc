@@ -21,7 +21,20 @@
 
   <h2>.</h2>
 
-  <button onclick="copyText('Hello World!')">Copy "Hello World!"</button>
+  <button onclick="copyText('from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName('read data eg').getOrCreate()
+df = spark.read.option("Header",True).csv('Employee.csv')
+df.show()
+df.show(5)
+df.printSchema()
+df.select("Salary").show()
+df.select("Salary").show(3)
+df.filter(df["Salary"]>15000).show()
+#CONVERT THE PYSPARK DATA FRAME TO PANDAS
+pandas_df = df.toPandas()
+print(pandas_df.head())
+print(pandas_df.tail())
+spark.stop()')">Copy "PySpark Data Reading and Display Example"</button>
   <button onclick="copyText('This is a test message.')">Copy Test Message</button>
   <button onclick="copyText('Sample Text 123')">Copy Sample Text</button>
 
