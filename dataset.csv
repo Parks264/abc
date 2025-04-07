@@ -1,0 +1,11 @@
+source_name,size(PB),storageType,areaSize,color
+IBM Cloud,10,Public,15,Blue
+Azure,25,Private,30,Green
+AWS,50,Public,40,Red
+GCP,30,Private,20,Yellow
+Oracle Cloud,5,Public,10,Purple
+DigitalOcean,2,Private,8,Orange
+Alibaba Cloud,40,Public,50,Pink
+AWS,100,Public,45,Blue
+IBM Cloud,15,Private,25,Cyan
+Azure,20,Private,35,Green
