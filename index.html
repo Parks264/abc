@@ -427,6 +427,17 @@ plt.show()
     cdt <- ctree(target, iris_train)
     table(predict(cdt, newdata = iris_test), iris_test$Species)
     plot(cdt, type="simple", main = "R")
+  
+  #Decision Tree Training & testing of data
+indexes= sample(150,90)
+iris_train= iris[indexes,]
+iris_test= iris[-indexes,]
+target = Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width
+cdt <- ctree(target, iris_train)
+table(predict(cdt,newdata=iris_test), iris_test$Species )
+summary(iris_test)
+plot(cdt, type="simple" , main="Decision Tree - Train & test : Marwa Parkar 023")
+
 </textarea>
 
 <!-- 13 -->
