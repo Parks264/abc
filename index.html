@@ -73,28 +73,39 @@
 <button onclick="copyCode('code2')">1B Load a Dataset, Calculate Descriptive Summary Statistics, Create Visualizations</button>
 <textarea id="code2" readonly>
    
-   import pandas as pd
+   
+import pandas as pd
 print("Marwa Parkar KSMSCIT023")
 print("=========================")
 df=pd.read_csv('train.csv')
 Df
+
+
 print("Marwa Parkar KSMSCIT023")
 print("=========================")
 print(df.describe())
+
+
 print("Marwa Parkar KSMSCIT023")
 print("=========================")
 print(df.describe(include='all'))
+
+
 print("Marwa Parkar KSMSCIT023")
 print("=========================")
 x= df.drop( ['Survived'],axis=1)
 y= df['Survived']
 print("Features : \n " , x)
 print("Targets : \n " ,y)
+
+
 import matplotlib.pyplot as plt
 print("Marwa Parkar KSMSCIT023")
 print("=========================")
 df.hist(bins=50,figsize=(20,15))
 plt.show()
+
+
 import matplotlib.pyplot as plt
 print("Marwa Parkar KSMSCIT023")
 print("=========================")
@@ -104,12 +115,16 @@ plt.xlabel('Age')
 plt.ylabel('Pclass')
 plt.title('Marwa Parkar KSMSCIT023')
 plt.show()
+
+
 plt.scatter( df['Pclass'] ,df['Age'] )
 plt.xlabel('Age')
 plt.ylabel('Pclass')
 print("Marwa Parkar KSMSCIT023")
 print("=========================")
 plt.show()
+
+
 import seaborn as sns
 sns.boxplot(x='Pclass',y='Age',data=df)
 print("Marwa Parkar KSMSCIT023")
