@@ -621,39 +621,52 @@ print("Valid balance sheet data processed and saved to 'cleaned_balance_sheet.cs
 </textarea>
 
 <!-- 13 -->
-<button onclick="copyCode('code12')"> 10 - MongoDB</button>
+<button onclick="copyCode('code12')"> 11 - MongoDB</button>
 <textarea id="code12" readonly>
-    import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 from pymongo import MongoClient
+
 class MongoDBClient:
- def __init__(self, uri, db_name):
- self.client = MongoClient(uri)
- self.db = self.client[db_name]
- self.status_message = f"Connected to {db_name}"
- def retrieve_documents(self, collection_name, limit=0):
- """Retrieve documents from the specified collection."""
- return list(self.db[collection_name].find(limit=limit))
-ATLAS_URI =
-"mongodb+srv://ayushrane26:Atlas123@practice.auav4.mongodb.net/?retryWrites=true&w=majority&ap
-pName=Practice"
-DB_NAME = 'sample_mflix'
-COLLECTION_NAME = 'embedded_movies'
+    def _init_(self, uri, db_name):
+        self.client = MongoClient(uri)
+        self.db = self.client[db_name]
+        self.status_message = f"Connected to {db_name}"
+
+    def retrieve_documents(self, collection_name, limit=0):
+        """Retrieve documents from the specified collection."""
+        return list(self.db[collection_name].find(limit=limit))
+
+# MongoDB connection string and setup
+ATLAS_URI = "mongodb+srv://aseer:richyrich@cluster0.sgcziez.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+DB_NAME = 'movies'
+COLLECTION_NAME = 'flims'
+
+# Create an instance of our client
 client = MongoDBClient(ATLAS_URI, DB_NAME)
+
+# Retrieve 5 documents from the collection
 docs = client.retrieve_documents(COLLECTION_NAME, limit=5)
+
+# Count total number of movies in the collection
 total_movies = client.db[COLLECTION_NAME].count_documents({})
+
+# Format the output string to be displayed
 output_message = (
- f"{client.status_message}\n"
- f"Total Movies: {total_movies}\n"
- f"Retrieved: {len(docs)} Movies\n\n"
- + "\n\n".join(
- [f'Title: {doc.get("title", "N/A")}\n'
- f'Year: {doc.get("year", "N/A")}\n'
- f'Plot: {doc.get("plot", "N/A")}\n'
- for doc in docs] ))
+    f"{client.status_message}\n"
+    f"Total Movies: {total_movies}\n"
+    f"Retrieved: {len(docs)} Movies\n\n"
+    + "\n\n".join(
+        [f'Title: {doc.get("title", "N/A")}\n'
+         f'Year: {doc.get("year", "N/A")}\n'
+         f'Plot: {doc.get("plot", "N/A")}\n' for doc in docs]
+    )
+)
+
+# Plotting the formatted message in a matplotlib text box
 plt.figure(figsize=(10, 6))
 plt.text(0.1, 0.5, output_message, fontsize=12, ha='left', va='center', wrap=True)
 plt.axis('off')
-plt.title("Movie Information", fontsize=16)
+plt.title("Name", fontsize=16)
 plt.show()
 
 </textarea>
